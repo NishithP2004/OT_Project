@@ -99,10 +99,11 @@ function calc(input) {
     x = parseFloat(x);
     y = parseFloat(y);
 
-    let temp = objectiveFn.replaceAll("x", `*${x}`);
-    temp = temp.replaceAll("y", `*${y}`);
-
-    let ans = parseFloat(eval(temp));
+    const compiled = math.compile(objectiveFn);
+    const ans = compiled.evaluate({
+        x,
+        y
+    })
 
     document.getElementById("evaluationResult").innerText = ans;
 }

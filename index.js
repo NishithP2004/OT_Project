@@ -1,6 +1,5 @@
 const express = require("express");
 require("dotenv").config();
-
 const multer = require("multer");
 const upload = multer({
     limits: 50, // 50mb
@@ -9,7 +8,9 @@ const upload = multer({
 const {
     ChatGoogleGenerativeAI
 } = require("@langchain/google-genai");
-const { HumanMessage } = require("@langchain/core/messages")
+const {
+    HumanMessage
+} = require("@langchain/core/messages")
 
 const app = express();
 
@@ -40,15 +41,15 @@ app.post("/solve", upload.single("image"), async (req, res) => {
             success: true,
             result: JSON.parse(result)
         })
-    } catch(err) {
-        if(err) {
+    } catch (err) {
+        if (err) {
             console.error(err)
             res.status(500).send({
                 error: err.message,
                 success: false
             })
         }
-        
+
     }
 
 })
@@ -82,8 +83,7 @@ async function solveQuestion(image) {
     ];
 
     const res = await model.invoke(input);
-
-    console.log(res.content);
-
-    return (res.content.startsWith("`") == true? JSON.parse(res.content.slice("```JSON".length, -"```".length)): res.content)
+    let result = res.content.trim();
+    console.log(result);
+    return (result.startsWith("`") == true) ? result.slice("```json".length + 1, -3) : result;
 }
