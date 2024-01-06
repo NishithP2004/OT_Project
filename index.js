@@ -1,5 +1,7 @@
 const express = require("express");
 require("dotenv").config();
+const favicon = require('serve-favicon')
+const path = require("path")
 const multer = require("multer");
 const upload = multer({
     limits: 50, // 50mb
@@ -19,6 +21,7 @@ app.use(express.urlencoded({
     extended: true
 }))
 app.use(express.static("public"))
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 const PORT = process.env.PORT || 3000;
 
