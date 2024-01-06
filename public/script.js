@@ -1,8 +1,9 @@
 var elt = document.getElementById('calculator');
 var calculator = Desmos.GraphingCalculator(elt, {
-    expressions: false
+    expressionsCollapsed: true
 });
 var objectiveFn;
+var reset = document.getElementById("reset")
 
 let form = document.forms[0];
 
@@ -32,7 +33,7 @@ form.addEventListener('submit', async (ev) => {
         if (!response.success) {
             alert("An error occurred.")
         } else {
-            document.getElementById("reset").click();
+            form.image.value = null;
             solve(response.result)
             console.log(response.result)
         }
@@ -106,4 +107,15 @@ function calc(input) {
     })
 
     document.getElementById("evaluationResult").innerText = ans;
+}
+
+reset.onclick = () => {
+    document.getElementById("points").innerText = ""
+    document.getElementById("evaluationResult").innerText = "";
+    document.getElementById("steps").innerHTML = "";
+    objectiveFn = null;
+    let img = document.getElementById("question");
+    img.src = "";
+    img.style.display = "none";
+    calculator.setBlank();
 }

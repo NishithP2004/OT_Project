@@ -50,6 +50,10 @@ h1 {
     .container {
         flex-direction: column;
     }
+    #calculator {
+        width: 300px !important;
+        height: 200px !important;
+    }
 }
 
 .form-container p {
@@ -176,4 +180,9 @@ footer {
     align-items: center;
     gap: 10px;
     padding: 2px 10px;
+}
+
+#question:hover {
+    transform: scale(1.5);
+    z-index: 99;
 }
