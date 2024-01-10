@@ -39,7 +39,7 @@ app.post("/solve", upload.single("image"), async (req, res) => {
     try {
         let imageBuffer = req.file.buffer;
 
-        const result = await solveQuestion(imageBuffer)
+        const result = await solveQuestion(imageBuffer, req.query.alg)
         res.status(200).send({
             success: true,
             result: JSON.parse(result)
@@ -57,10 +57,10 @@ app.post("/solve", upload.single("image"), async (req, res) => {
 
 })
 
-async function solveQuestion(image) {
+async function solveQuestion(image, type = "graph") {
     const input = [
         new HumanMessage({
-            content: [{
+            content: [(type == "graph") ? ({
                     type: "text",
                     text: `SYSTEM:  You are an intelligent Math question parser.
                                     Given the image of a question, you can intelligently identify the various constraints and the objective function and return the same in JSON format.
@@ -76,7 +76,22 @@ async function solveQuestion(image) {
                                         "description": "A brief description about the variables used"
                                     }
                                     `,
-                },
+                }) : ({
+                    type: "text",
+                    text: `SYSTEM:  You are an intelligent Math question parser.
+                                    Given the image of a question, you can intelligently identify the various arguments and the objective function and return the same in JSON format.
+                                    All the mathematical functions must be in Latex format.
+                                    Output Format: 
+                                    {
+                                        "equation": "", // return the objective function in normal latex syntax 
+                                        "description": "A brief description about the variables used",
+                                        "epsilon": "termination_param_value",
+                                        "guess" [x, y],
+                                        "variables": ['x', 'y']
+                                    }
+                                    Example Output:  { "equation":"(x-2)^2 + (y-3)^2","guess": [-1, 4],"tolerance":0.1 }
+                                    `,
+                }),
                 {
                     type: "image_url",
                     image_url: `data:image/png;base64,${image.toString("base64")}`,

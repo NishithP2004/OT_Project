@@ -29,6 +29,11 @@
                     <form class="glass" name="" id="" action="/solve" method="POST">
                         <label for="image">Upload an image of your LP problem: </label>
                         <input type="file" accept="image/*" name="image" id="image" class="glass" required>
+                        <fieldset name="radio-group" class="radio-group">
+                            <legend>Algorithm</legend>
+                            <input type="radio" name="alg" value="graph" />Graph
+                            <input type="radio" name="alg" value="newton" />Newton Search
+                        </fieldset>
                         <br />
                         <button type="submit" id="submit">Submit</button>
                         <button type="reset" id="reset">Reset</button>
@@ -39,9 +44,10 @@
             <div id="output">
                 <div id="steps" class="glass">
                 </div>
-                <div id="calculator" style="width: 600px; height: 400px;"></div>
+                <div id="calculator" style="width: 400px; height: 200px;"></div>
                 <div id="answer" class="glass">
-                    <input type="text" placeholder="x, y" name="points" id="points" required onchange="calc(this.value)" style="padding: 10px; border-radius: 10px;">
+                    <input type="text" placeholder="x, y" name="points" id="points" required onchange="calc(this.value)"
+                        style="padding: 10px; border-radius: 10px;">
                     <p> = <span id="evaluationResult"></span></p>
                 </div>
             </div>
@@ -51,7 +57,7 @@
     <footer class="glass">
         <p>Made with ♥️ & 🍫 by Nishith P</p>
     </footer>
-
+    <script src="./newtonSearch.js" type="text/javascript"></script> 
     <script src="./script.js" type="text/javascript"></script>
 </body>
 

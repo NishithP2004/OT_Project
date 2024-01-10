@@ -1,6 +1,7 @@
 var elt = document.getElementById('calculator');
 var calculator = Desmos.GraphingCalculator(elt, {
-    expressionsCollapsed: true
+    expressionsCollapsed: true,
+    autoSize: false
 });
 var objectiveFn;
 var reset = document.getElementById("reset")
@@ -21,19 +22,20 @@ form.addEventListener('submit', async (ev) => {
         imgElement.style.display = "block";
         imgElement.src = objectURL;
 
-        const response = await fetch(form.action, {
+        const response = await fetch(form.action + "?alg=" + form.alg.value, {
                 method: form.method,
                 body: formData
             })
             .then((res) => {
                 return res.json();
             })
-            .catch(err => console.error)
+            .catch(err => console.error(err.message))
 
         if (!response.success) {
             alert("An error occurred.")
         } else {
             form.image.value = null;
+            response.result.alg = form.alg.value;
             solve(response.result)
             console.log(response.result)
         }
@@ -47,9 +49,10 @@ form.addEventListener('submit', async (ev) => {
 })
 
 const solve = (data) => {
-    let steps = document.getElementById("steps");
-    steps.innerHTML =
-        `
+    if (data.alg == "graph") {
+        let steps = document.getElementById("steps");
+        steps.innerHTML =
+            `
     <table border="1" cellspacing="10px" cellpadding="10px" class="stepsTable">
         <thead>
             <tr>
@@ -74,14 +77,24 @@ const solve = (data) => {
     <p>${data.description}</p>
     `
 
-    data.constraints.forEach((c, i) => {
-        calculator.setExpression({
-            id: 'constraint' + i,
-            latex: c
-        });
-    })
+        data.constraints.forEach((c, i) => {
+            calculator.setExpression({
+                id: 'constraint' + i,
+                latex: c
+            });
+        })
 
-    objectiveFn = data.objective;
+        objectiveFn = data.objective;
+    } else {
+        newtonSearch({
+            equation: data.equation,
+            variables: data.variables,
+            epsilon: data.epsilon,
+            maxIterations: 100,
+            guess: data.guess,
+            description: data.description
+        }, calculator);
+    }
 }
 
 calculator.observe('expressionAnalysis', function () {

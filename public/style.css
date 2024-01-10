@@ -37,7 +37,6 @@ h1 {
 }
 
 .glass {
-    /* From https://css.glass */
     background: rgba(7, 248, 255, 0.11);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -63,6 +62,7 @@ h1 {
 form>label {
     font-family: 'Roboto', sans-serif;
     font-size: 0.8rem;
+    margin-bottom: 5px;
 }
 
 form>input::placeholder,
@@ -131,6 +131,8 @@ footer {
     font-family: 'Quicksand', Courier, monospace;
     text-align: left;
     font-size: medium;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 #question {
@@ -185,4 +187,14 @@ footer {
 #question:hover {
     transform: scale(1.5);
     z-index: 99;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: small;
 }
